@@ -39,6 +39,7 @@ func (suite *TestMover) SetupSuite() {
 func (suite *TestMover) SetupTest() {
 	instance = nil
 }
+
 func (suite *TestMover) TestAppStart() {
 	t := suite.T()
 	mouseMover := GetInstance()
@@ -46,6 +47,7 @@ func (suite *TestMover) TestAppStart() {
 	time.Sleep(time.Millisecond * 500) //wait for app to start
 	assert.True(t, mouseMover.state.isRunning(), "app should have started")
 }
+
 func (suite *TestMover) TestSingleton() {
 	t := suite.T()
 
@@ -69,6 +71,7 @@ func (suite *TestMover) TestLogFile() {
 	assert.FileExists(t, filePath, "log file should exist")
 	os.RemoveAll(filePath)
 }
+
 func (suite *TestMover) TestSystemSleepAndWake() {
 	t := suite.T()
 	mouseMover := GetInstance()
@@ -215,4 +218,30 @@ func (suite *TestMover) TestRunPreventsMultipleStarts() {
 	// calling run when already running should return immediately and not change running state
 	mouseMover.run(suite.heartbeatCh, suite.activityTracker)
 	assert.True(t, mouseMover.state.isRunning(), "state should remain running after calling run again")
+}
+
+func (suite *TestMover) TestMovementModesAndConfig() {
+	t := suite.T()
+	cfg := DefaultConfig()
+	assert.Equal(t, 60, cfg.IntervalSeconds)
+	assert.Equal(t, ModeStandard, cfg.MovementMode)
+
+	m := GetInstance()
+	customCfg := Config{
+		IntervalSeconds: 30,
+		MovementMode:    ModeMicro,
+	}
+
+	state := &state{
+		override: &override{valueToReturn: true},
+	}
+	m.state = state
+	m.config = customCfg
+
+	successCh := make(chan bool, 1)
+	moveAndCheck(state, 1, ModeMicro, successCh)
+	assert.True(t, <-successCh)
+
+	moveAndCheck(state, 10, ModeJiggle, successCh)
+	assert.True(t, <-successCh)
 }

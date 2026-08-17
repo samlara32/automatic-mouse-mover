@@ -17,21 +17,49 @@ const (
 	logFileName = "logFile-amm-5"
 )
 
-// Start the main app
+// DefaultConfig returns default runtime configuration (60s interval, standard mode)
+func DefaultConfig() Config {
+	return Config{
+		IntervalSeconds: 60,
+		MovementMode:    ModeStandard,
+	}
+}
+
+// Start the main app with default settings
 func (m *MouseMover) Start() {
-	if m.state.isRunning() {
+	if m.config.IntervalSeconds <= 0 {
+		m.config = DefaultConfig()
+	}
+	m.StartWithConfig(m.config)
+}
+
+// StartWithConfig starts the main app with custom configuration
+func (m *MouseMover) StartWithConfig(cfg Config) {
+	if m.state != nil && m.state.isRunning() {
 		return
 	}
+	if cfg.IntervalSeconds <= 0 {
+		cfg.IntervalSeconds = 60
+	}
+	if cfg.MovementMode == "" {
+		cfg.MovementMode = ModeStandard
+	}
+	m.config = cfg
 	m.state = &state{}
 	m.quit = make(chan struct{})
 
-	heartbeatInterval := 60 //value always in seconds
+	heartbeatInterval := cfg.IntervalSeconds
 	workerInterval := 10
+	if heartbeatInterval <= workerInterval {
+		workerInterval = heartbeatInterval / 2
+		if workerInterval <= 0 {
+			workerInterval = 1
+		}
+	}
 
 	activityTracker := &tracker.Instance{
 		HeartbeatInterval: heartbeatInterval,
 		WorkerInterval:    workerInterval,
-		// LogLevel:          "debug", //if we want verbose logging
 	}
 
 	heartbeatCh := activityTracker.Start()
@@ -48,6 +76,10 @@ func (m *MouseMover) run(heartbeatCh chan *tracker.Heartbeat, activityTracker *t
 
 		logger := getLogger(m, false, logFileName) //set writeToFile=true only for debugging
 		movePixel := 10
+		if m.config.MovementMode == ModeMicro {
+			movePixel = 1
+		}
+
 		for {
 			select {
 			case heartbeat := <-heartbeatCh:
@@ -57,7 +89,7 @@ func (m *MouseMover) run(heartbeatCh chan *tracker.Heartbeat, activityTracker *t
 						continue
 					}
 					mouseMoveSuccessCh := make(chan bool)
-					go moveAndCheck(state, movePixel, mouseMoveSuccessCh)
+					go moveAndCheck(state, movePixel, m.config.MovementMode, mouseMoveSuccessCh)
 					select {
 					case wasMouseMoveSuccess := <-mouseMoveSuccessCh:
 						if wasMouseMoveSuccess {
@@ -110,7 +142,7 @@ func (m *MouseMover) run(heartbeatCh chan *tracker.Heartbeat, activityTracker *t
 // Quit the app
 func (m *MouseMover) Quit() {
 	//making it idempotent
-	if m != nil && m.state.isRunning() {
+	if m != nil && m.state != nil && m.state.isRunning() {
 		m.state.updateRunningStatus(false)
 		m.quit <- struct{}{}
 	}
@@ -123,7 +155,8 @@ func (m *MouseMover) Quit() {
 func GetInstance() *MouseMover {
 	if instance == nil {
 		instance = &MouseMover{
-			state: &state{},
+			state:  &state{},
+			config: DefaultConfig(),
 		}
 	}
 	return instance

@@ -1,100 +1,181 @@
-# Presenting the minimalistic Automatic-Mouse-Mover(AMM) app!
+<div align="center">
 
-[![version][version-badge]][releases] [![Go Report Card](https://goreportcard.com/badge/github.com/Resousse/automatic-mouse-mover)](https://goreportcard.com/report/github.com/Resousse/automatic-mouse-mover) [![godoc-badge][godoc-badge]][godoc-link] [![codecov](https://codecov.io/gh/Resousse/automatic-mouse-mover/branch/master/graph/badge.svg)](https://codecov.io/gh/Resousse/automatic-mouse-mover)
+<img width="160" height="160" alt="app-icon" src="https://github.com/user-attachments/assets/6f309010-0c56-4da4-80ee-89815d990a2c" />
 
-Ever felt the need to keep your machine awake without actually having to move the mouse pointer manually at regular intervals? **Well, not anymore!**
+# Automatic Mouse Mover
 
-Introducing the simplest app that has the sole purpose of **moving your mouse pointer at regular intervals so that your machine is kept awake!** And best of all, it works **ONLY** when you are not working, so be rest assured that the mouse won't start moving on its own without the machine actually being idle.
+### Stay active. Stay focused.
 
-This application has been initially created by **@prashantgupta24**, but he won't get any feature improvement.
+**A lightweight, native macOS menu bar utility that intelligently simulates cursor activity when you're away.**
 
-**Table of contents**
+<p>
+  <a href="https://github.com/samlara32/automatic-mouse-mover/releases/latest">
+    <img src="https://img.shields.io/github/v/release/samlara32/automatic-mouse-mover?style=for-the-badge&label=DOWNLOAD&color=0A84FF" alt="Latest Release">
+  </a>
+  <a href="https://github.com/samlara32/automatic-mouse-mover">
+    <img src="https://img.shields.io/github/stars/samlara32/automatic-mouse-mover?style=for-the-badge&color=F5C518" alt="GitHub Stars">
+  </a>
+</p>
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
+<p>
+  <img src="https://img.shields.io/badge/macOS-Universal_(ARM64_+_x86__64)-007AFF?style=flat-square&logo=apple&logoColor=white" alt="macOS Universal">
+  <img src="https://img.shields.io/badge/Go-1.25%2B-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go Version">
+  <img src="https://img.shields.io/github/license/samlara32/automatic-mouse-mover?style=flat-square&color=34C759" alt="License">
+</p>
 
-<!-- code_chunk_output -->
+<br>
 
-- [How it's different from other apps](#how-its-different-from-other-apps)
-- [How I use it](#how-i-use-it)
-  - [Work from home benefit](#work-from-home-benefit)
-- [Demo](#demo)
-- [How to install](#how-to-install)
-  - [Install from binary](#install-from-binary)
-  - [Install from source](#install-from-source)
-- [Granting access for moving the mouse cursor](#granting-access-for-moving-the-mouse-cursor)
-- [How it works](#how-it-works)
+<img width="720" height="524" alt="amm-demo" src="https://github.com/user-attachments/assets/4709bc8e-1456-47dc-b856-d9cf1c617806" />
 
-<!-- /code_chunk_output -->
+</div>
 
-## How it's different from other apps
+---
 
-The main difference between this app and other apps is that this app **keeps your machine awake**, whereas other apps keep your machine from going to sleep. Let me explain.
+## Why AMM?
 
-If you use a messaging app like Slack, they are programmed to automatically change your status to `Away` when you don't interact with your machine for a certain amount of time. Apps which keep your machine from going to sleep will not be able to stop that. This app will prevent that, since **it is actively keeping your machine awake by moving the mouse pointer**.
+Traditional keep-awake utilities are designed to prevent your Mac from sleeping. They don't keep your **workplace presence active**.
 
-**This comes very close to simulating an actual user using the machine, which the other apps cannot do.**
+Applications such as Slack, Microsoft Teams, and Discord detect inactivity independently and change your status to **Away**.
 
-So if you want something that will keep your mac awake as long as you don't manually put it to sleep, then this is for you!
+**Automatic Mouse Mover (AMM)** monitors your activity and only simulates subtle cursor movement when you've been idle — while automatically pausing when you return or when macOS enters a sleep state.
 
-## How I use it
+> **No unnecessary movement. No background network activity. No tracking.**
 
-I always have this app working in the background for me whenever I work from home, so that I can take a break from work, strech my legs, go for a short walk, come back and still have my slack open and set to active! (not having to type in my password every time is awesome, for machines without fingerprint sensors anyway).
+### Comparison
 
-Also if I need to go out for longer, I just close the lid, and off goes my mac to sleep!
+| Capability | Standard Keep-Awake Utilities | Automatic Mouse Mover (AMM) |
+| :--- | :---: | :---: |
+| Prevents Display Sleep | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:check.svg?color=%233FB950"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:check.svg?color=%231A7F37"><img alt="check" src="https://api.iconify.design/lucide:check.svg?color=%231A7F37" width="16" height="16" /></picture> Yes | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:check.svg?color=%233FB950"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:check.svg?color=%231A7F37"><img alt="check" src="https://api.iconify.design/lucide:check.svg?color=%231A7F37" width="16" height="16" /></picture> Yes |
+| Keeps Slack / Teams Active | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:x.svg?color=%23F85149"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:x.svg?color=%23CF222E"><img alt="x" src="https://api.iconify.design/lucide:x.svg?color=%23CF222E" width="16" height="16" /></picture> No (Status becomes Away) | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:check.svg?color=%233FB950"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:check.svg?color=%231A7F37"><img alt="check" src="https://api.iconify.design/lucide:check.svg?color=%231A7F37" width="16" height="16" /></picture> Yes (Status remains Active) |
+| Smart Inactivity Detection | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:x.svg?color=%23F85149"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:x.svg?color=%23CF222E"><img alt="x" src="https://api.iconify.design/lucide:x.svg?color=%23CF222E" width="16" height="16" /></picture> No (Runs continuously) | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:check.svg?color=%233FB950"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:check.svg?color=%231A7F37"><img alt="check" src="https://api.iconify.design/lucide:check.svg?color=%231A7F37" width="16" height="16" /></picture> Yes (Only triggers when idle) |
+| Micro-Nudge Mode | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:x.svg?color=%23F85149"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:x.svg?color=%23CF222E"><img alt="x" src="https://api.iconify.design/lucide:x.svg?color=%23CF222E" width="16" height="16" /></picture> No | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:check.svg?color=%233FB950"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:check.svg?color=%231A7F37"><img alt="check" src="https://api.iconify.design/lucide:check.svg?color=%231A7F37" width="16" height="16" /></picture> Yes (1 px imperceptible shift) |
+| System Sleep / Lid Close Awareness | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:x.svg?color=%23F85149"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:x.svg?color=%23CF222E"><img alt="x" src="https://api.iconify.design/lucide:x.svg?color=%23CF222E" width="16" height="16" /></picture> No | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:check.svg?color=%233FB950"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:check.svg?color=%231A7F37"><img alt="check" src="https://api.iconify.design/lucide:check.svg?color=%231A7F37" width="16" height="16" /></picture> Yes (Automatically pauses) |
+| Native Apple Silicon Architecture | Varies (often x86 / Electron) | <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:check.svg?color=%233FB950"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:check.svg?color=%231A7F37"><img alt="check" src="https://api.iconify.design/lucide:check.svg?color=%231A7F37" width="16" height="16" /></picture> Yes (Universal Mach-O binary) |
 
-### Work from home benefit
+---
 
-Since this app actively keeps your machine awake, your messaging app will never go on idle and put your status as `Away`.
+## <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:sparkles.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:sparkles.svg?color=%230969DA"><img alt="sparkles" src="https://api.iconify.design/lucide:sparkles.svg?color=%230969DA" width="22" height="22" /></picture> Features
 
-## Demo
+- <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:cpu.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:cpu.svg?color=%230969DA"><img alt="cpu" src="https://api.iconify.design/lucide:cpu.svg?color=%230969DA" width="16" height="16" /></picture> **Universal 2 Architecture**: Native Mach-O binary compiled for both Apple Silicon (M1/M2/M3/M4) and Intel (x86_64) without Rosetta emulation.
+- <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:clock.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:clock.svg?color=%230969DA"><img alt="clock" src="https://api.iconify.design/lucide:clock.svg?color=%230969DA" width="16" height="16" /></picture> **Configurable Idle Intervals**: Customize idle detection frequency:
+  - `30 Seconds`
+  - `1 Minute` (Default)
+  - `2 Minutes`
+  - `5 Minutes`
+  - `10 Minutes`
+- <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:mouse-pointer-click.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:mouse-pointer-click.svg?color=%230969DA"><img alt="mouse" src="https://api.iconify.design/lucide:mouse-pointer-click.svg?color=%230969DA" width="16" height="16" /></picture> **Three Movement Modes**:
+  - **Standard (`10 px`)**: Subtle back-and-forth cursor shift.
+  - **Micro-Nudge (`1 px`)**: Imperceptible movement that registers as user activity.
+  - **Jiggle**: Randomized natural micro-movements.
+- <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:timer.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:timer.svg?color=%230969DA"><img alt="timer" src="https://api.iconify.design/lucide:timer.svg?color=%230969DA" width="16" height="16" /></picture> **Auto-Stop Countdown Timers**: Automatically stops after a specified duration:
+  - `30 Minutes`
+  - `1 Hour`
+  - `2 Hours`
+  - `4 Hours`
+  - `Continuous` (Default)
+- <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:moon.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:moon.svg?color=%230969DA"><img alt="moon" src="https://api.iconify.design/lucide:moon.svg?color=%230969DA" width="16" height="16" /></picture> **Sleep & Lid Awareness**: Automatically pauses cursor activity when your Mac sleeps or the lid closes via IOKit.
+- <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:apple.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:apple.svg?color=%230969DA"><img alt="apple" src="https://api.iconify.design/lucide:apple.svg?color=%230969DA" width="16" height="16" /></picture> **macOS Human Interface Guidelines Compliance**: Clean menu typography, native checkmark selection indicators, dynamic Light/Dark mode template icons, and background agent mode (`LSUIElement`).
+- <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:key-round.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:key-round.svg?color=%230969DA"><img alt="key" src="https://api.iconify.design/lucide:key-round.svg?color=%230969DA" width="16" height="16" /></picture> **Persistent Code Signing**: Designated requirement identity ensures Accessibility permissions remain valid across rebuilds and updates.
+- <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:shield-check.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:shield-check.svg?color=%230969DA"><img alt="shield" src="https://api.iconify.design/lucide:shield-check.svg?color=%230969DA" width="16" height="16" /></picture> **Offline & Private**: Zero telemetry, zero analytics, and zero network calls.
 
-You just click on `Start`, and AMM will take care of moving your mouse whenever it feels that the system has been left idle for a minute. It's as simple as this.
+---
 
-![](resources/amm-demo.gif)
+## <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:download.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:download.svg?color=%230969DA"><img alt="download" src="https://api.iconify.design/lucide:download.svg?color=%230969DA" width="22" height="22" /></picture> Installation
 
-## How to install
+### Option 1: DMG Installer (Recommended)
 
-### Install from binary
+1. Download the latest **[`AutomaticMouseMover.dmg`](https://github.com/samlara32/automatic-mouse-mover/releases/latest)** from the Releases page.
+2. Open the `.dmg` file and drag `amm.app` into your `/Applications` directory.
+3. Open `amm` from `/Applications` or Spotlight search.
 
-1. Download the latest `amm.app.zip` from the [releases](https://github.com/Resousse/automatic-mouse-mover/releases) page, unzip it, and copy the .app to your `Applications` folder like any other application.
+> [!NOTE]
+> If macOS displays an *Unidentified Developer* notice on first launch, Right-Click (or Control-Click) `amm.app` in Finder, select **Open**, and confirm.
 
-1. Since the application is not notarized, you will need to right click on the .app and choose Open.
+---
 
-1. You will see a scary message that warns you about all the bad things that the app can do to your computer. If you are paranoid (fair enough, you don't really know me that well) then you can skip to the section which builds the app from source. That way you can see what exactly the app does (You can check that the application makes no connections to the internet whatsoever).
+### Option 2: Build and Install from Source
 
-1. In case you do trust me, once you click on `Open`, you might encounter an initial `Access request` which I've discussed in the next section.
+Requirements: Go 1.23+ and Xcode Command Line Tools (`xcode-select --install`).
 
-### Install from source
+```bash
+# Clone the repository
+git clone https://github.com/samlara32/automatic-mouse-mover.git
+cd automatic-mouse-mover
 
-Make sure you have `go` installed. Once that is done, clone this repo and run `Make`, it should create the `amm.app` and open the folder where it was built for you. Copy the .app to your `Applications` folder like any other application.
+# Compile Universal binary and install to /Applications
+make install
+```
 
-Double click on the app, and the cute `mouse` should appear on your taskbar on top of your screen. Once you click on `Start`, you might encounter an initial `Access request` which I've discussed in the next section. If not, then you are all set!
+---
 
-## Granting access for moving the mouse cursor
+## <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:lock.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:lock.svg?color=%230969DA"><img alt="lock" src="https://api.iconify.design/lucide:lock.svg?color=%230969DA" width="22" height="22" /></picture> Accessibility Permission
 
-While starting the app, you might see a message like the one below or an error stating `Mouse pointer cannot be moved`.
+Because macOS restricts automated input simulation, AMM requires standard Accessibility permission:
 
-![](resources/request.jpg)
+1. Open **System Settings** -> **Privacy & Security** -> **Accessibility**.
+2. Toggle the switch next to **amm** to **ON**.
+3. If replacing an older build, click `-` to remove any stale entries, then click `+` and select `/Applications/amm.app`.
 
-Don't worry, it's nothing sinister, it's just that Mac doesn't allow apps to gain accessibility to the computer by default (even standard apps like Automator, Firefox etc. who might want to access some features need to go through the same process).
+---
 
-In order to resolve this error you need to:
+## <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:workflow.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:workflow.svg?color=%230969DA"><img alt="workflow" src="https://api.iconify.design/lucide:workflow.svg?color=%230969DA" width="22" height="22" /></picture> How It Works
 
-> Go to System Preferences -> Security & Privacy -> Privacy -> Accessibility and allow the `amm` app to gain access.
+```mermaid
+flowchart LR
+    A[Heartbeat Interval] --> B{User Activity Detected?}
+    B -- Yes (Typing / Mouse) --> C[Reset Interval & Idle]
+    B -- No (System Inactive) --> D{Is System Sleeping?}
+    D -- Yes (Lid Closed / Display Asleep) --> E[Pause Activity]
+    D -- No (System Awake) --> F[Execute Configured Movement Mode]
+```
 
-If you still see the error, try to quit and start the app again (the age-old way of fixing everything).
+1. **Activity Tracker**: AMM queries system event counters (keystrokes, mouse deltas, display state) at the configured interval.
+2. **IOKit Sleep Notification**: AMM listens to macOS power management events and pauses when the lid is closed or the computer is put to sleep manually.
+3. **CoreGraphics Event Dispatch**: If no user input was detected and the system remains awake, AMM shifts the pointer coordinates according to the selected movement mode.
 
-## How it works
+---
 
-Every 60 seconds, AMM uses [Activity tracker](https://github.com/resousse/activity-tracker) to track the various changes that happened in your system during that time, like cursor movement, mouse clicks, screen changes etc. Whenever `AMM` detects a change in the system, it knows that the system is busy and will not do anything. If not, it moves the mouse cursor ever so slightly, enough to keep your Mac awake for eternity.
+## <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:terminal.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:terminal.svg?color=%230969DA"><img alt="terminal" src="https://api.iconify.design/lucide:terminal.svg?color=%230969DA" width="22" height="22" /></picture> Development
 
-> All code is public and open-sourced so no worrying if there's nefarious intention involved in recording your activity or not.
+The project includes a Makefile for building, testing, and release management:
 
-[version-badge]: https://img.shields.io/github/release/Resousse/automatic-mouse-mover.svg
-[releases]: https://github.com/Resousse/automatic-mouse-mover/releases
-[godoc-badge]: https://img.shields.io/badge/godoc-reference-blue.svg
-[godoc-link]: https://godoc.org/github.com/Resousse/automatic-mouse-mover/pkg/mousemover
+| Target | Description |
+| :--- | :--- |
+| `make build` | Compiles the Universal binary (`arm64` + `x86_64`) into `./bin/amm.app`. |
+| `make package` | Builds the application and creates `AutomaticMouseMover.dmg`. |
+| `make install` | Builds, signs, and installs the application into `/Applications`. |
+| `make uninstall` | Terminates running instances, removes `/Applications/amm.app`, and resets TCC permissions. |
+| `make test` | Executes unit tests with race detection (`go test -v -race ./...`). |
+| `make release` | Interactive terminal prompt to bump version, run tests, and publish a GitHub release. |
 
-## Contributions welcome!
+---
 
-Please feel free to contribute and make this open source app even better! Adding more pluggable activities to [Activity tracker](https://github.com/resousse/activity-tracker) will make sure that AMM works even better!
+## <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:shield-check.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:shield-check.svg?color=%230969DA"><img alt="shield" src="https://api.iconify.design/lucide:shield-check.svg?color=%230969DA" width="22" height="22" /></picture> Privacy & Security
+
+- **Zero Network Calls**: AMM contains no network libraries, telemetry, crash reporting, or remote connections.
+- **Open Source**: Full source code is publicly accessible and auditable.
+- **Local Configuration**: Settings are stored locally in `~/.config/amm/settings.json`.
+
+---
+
+## <picture><source media="(prefers-color-scheme: dark)" srcset="https://api.iconify.design/lucide:help-circle.svg?color=%2358A6FF"><source media="(prefers-color-scheme: light)" srcset="https://api.iconify.design/lucide:help-circle.svg?color=%230969DA"><img alt="help" src="https://api.iconify.design/lucide:help-circle.svg?color=%230969DA" width="22" height="22" /></picture> FAQ
+
+**Does AMM move my mouse continuously?**  
+No. AMM only performs a subtle movement after you have been completely inactive for your configured interval.
+
+**Does it work natively on Apple Silicon and Intel Macs?**  
+Yes. AMM is compiled as a Universal Mach-O binary supporting both `arm64` (M1/M2/M3/M4) and `x86_64`.
+
+**Why is Accessibility permission required?**  
+macOS restricts applications from generating synthetic mouse events without explicit user authorization in Privacy & Security.
+
+**Can I set it to stop automatically?**  
+Yes. AMM provides configurable countdown stop timers (`30m`, `1h`, `2h`, `4h`, or Continuous).
+
+---
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
+
+*Originally created by [@prashantgupta24](https://github.com/prashantgupta24). Maintained and enhanced by [@samlara32](https://github.com/samlara32).*

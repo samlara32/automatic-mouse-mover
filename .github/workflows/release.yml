@@ -1,0 +1,104 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to release (e.g. v1.5.1)'
+        required: true
+        type: string
+      release_title:
+        description: 'Release Title (e.g. Release v1.5.1)'
+        required: false
+        type: string
+        default: ''
+      release_notes:
+        description: 'Release Notes (optional custom description)'
+        required: false
+        type: string
+        default: ''
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+      draft:
+        description: 'Save as draft'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish-release:
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.3'
+
+      - name: Run Unit Tests
+        run: go test -v ./...
+
+      - name: Build Universal macOS Application & DMG
+        run: |
+          make package
+          cd bin
+          zip -r amm.app.zip amm.app
+
+      - name: Determine Release Tag and Title
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ github.event.inputs.version }}"
+            # Ensure tag starts with 'v'
+            if [[ ! "$TAG" =~ ^v ]]; then
+              TAG="v$TAG"
+            fi
+            TITLE="${{ github.event.inputs.release_title }}"
+            if [ -z "$TITLE" ]; then
+              TITLE="Release $TAG"
+            fi
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
+            echo "title=$TITLE" >> $GITHUB_OUTPUT
+          else
+            TAG="${{ github.ref_name }}"
+            TITLE="Release $TAG"
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
+            echo "title=$TITLE" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create / Update Tag for Manual Dispatch
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -fa "${{ steps.vars.outputs.tag }}" -m "${{ steps.vars.outputs.title }}"
+          git push origin "${{ steps.vars.outputs.tag }}" --force
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          name: ${{ steps.vars.outputs.title }}
+          body: ${{ github.event.inputs.release_notes }}
+          files: |
+            bin/AutomaticMouseMover.dmg
+            bin/amm.app.zip
+          draft: ${{ github.event.inputs.draft || false }}
+          prerelease: ${{ github.event.inputs.prerelease || false }}
+          make_latest: true
+          generate_release_notes: ${{ github.event.inputs.release_notes == '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
