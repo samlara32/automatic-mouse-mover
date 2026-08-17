@@ -1,6 +1,7 @@
 package mousemover
 
 import (
+	"math/rand"
 	"os"
 	"time"
 
@@ -37,14 +38,42 @@ func getLogger(m *MouseMover, doWriteToFile bool, filename string) *log.Logger {
 	return logger
 }
 
-func moveAndCheck(state *state, movePixel int, mouseMoveSuccessCh chan bool) {
+func moveAndCheck(state *state, movePixel int, mode MovementMode, mouseMoveSuccessCh chan bool) {
 	if state.override != nil { //we don't want to move mouse for tests
 		mouseMoveSuccessCh <- state.override.valueToReturn
 		return
 	}
 	currentX, currentY := robotgo.GetMousePos()
-	moveToX := currentX + movePixel
-	moveToY := currentY + movePixel
+
+	dx := movePixel
+	dy := movePixel
+
+	switch mode {
+	case ModeMicro:
+		if movePixel > 0 {
+			dx = 1
+			dy = 1
+		} else {
+			dx = -1
+			dy = -1
+		}
+	case ModeJiggle:
+		r := rand.New(rand.NewSource(time.Now().UnixNano()))
+		offset := r.Intn(8) + 4 // 4 to 11 px
+		if movePixel < 0 {
+			offset = -offset
+		}
+		dx = offset
+		dy = offset
+		if r.Intn(2) == 0 {
+			dy = -dy
+		}
+	default:
+		// Standard mode uses movePixel directly (default 10px / -10px)
+	}
+
+	moveToX := currentX + dx
+	moveToY := currentY + dy
 	robotgo.Move(moveToX, moveToY)
 
 	//check if mouse moved. Sometimes mac users need to give
