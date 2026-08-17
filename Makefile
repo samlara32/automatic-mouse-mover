@@ -15,7 +15,7 @@ build: clean
 	CGO_ENABLED=1 GOARCH=amd64 CC="clang -target x86_64-apple-macos10.13" go build -o ./bin/amm_amd64 cmd/main.go
 	lipo -create -output ./bin/amm.app/Contents/MacOS/amm ./bin/amm_arm64 ./bin/amm_amd64
 	rm -f ./bin/amm_arm64 ./bin/amm_amd64
-	codesign --force --deep --sign - ./bin/amm.app
+	codesign --force --deep --sign - --identifier "com.pg.amm" ./bin/amm.app
 
 build-arm64: clean
 	mkdir -p -v ./bin/amm.app/Contents/Resources/assets/icon
@@ -24,7 +24,7 @@ build-arm64: clean
 	cp ./appInfo/*.icns ./bin/amm.app/Contents/Resources/icon.icns
 	cp ./assets/icon/* ./bin/amm.app/Contents/Resources/assets/icon
 	CGO_ENABLED=1 GOARCH=arm64 go build -o ./bin/amm.app/Contents/MacOS/amm cmd/main.go
-	codesign --force --deep --sign - ./bin/amm.app
+	codesign --force --deep --sign - --identifier "com.pg.amm" ./bin/amm.app
 
 package: build
 	rm -f ./bin/AutomaticMouseMover.dmg ./bin/Applications
