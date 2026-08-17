@@ -1,9 +1,12 @@
-name: Go
+name: CI
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  build:
+  test:
     runs-on: macos-14
     steps:
       - name: Checkout repository
